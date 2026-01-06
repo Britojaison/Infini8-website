@@ -8,19 +8,19 @@ const services = [
     id: 1,
     title: "Automations",
     description: "Streamline your business processes with intelligent automation solutions that save time and reduce errors.",
-    image: null,
+    image: "/automation.jpg",
   },
   {
     id: 2,
     title: "Web Development",
     description: "Create stunning, responsive websites that engage your audience and drive business growth.",
-    image: "/web.jpg",
+    image: "/web4.png",
   },
   {
     id: 3,
     title: "App Development",
     description: "Build powerful mobile and web applications that deliver exceptional user experiences.",
-    image: null,
+    image: "/app.jpg",
   },
 ];
 

@@ -34,10 +34,18 @@ export const About = () => {
 
     const handleWheel = (e: WheelEvent) => {
       const rect = container.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
       
-      // Check if section is in view - more accurate detection
-      const isInView = rect.top < window.innerHeight && rect.bottom > 0;
-      const isFullyInView = rect.top <= 100 && rect.bottom >= window.innerHeight - 100;
+      // Check if section is in view
+      const isInView = rect.bottom > 0 && rect.top < viewportHeight;
+      
+      // Check if section is mostly in view (more lenient for 70vh section)
+      // Section is considered "active" if it's mostly visible (at least 50% visible)
+      const sectionHeight = rect.height;
+      const visibleTop = Math.max(0, -rect.top);
+      const visibleBottom = Math.min(sectionHeight, viewportHeight - rect.top);
+      const visibleHeight = visibleBottom - visibleTop;
+      const isActive = visibleHeight >= sectionHeight * 0.5; // At least 50% visible
       
       // If section is not in view at all, don't interfere
       if (!isInView) {
@@ -62,7 +70,7 @@ export const About = () => {
       // Accumulate scroll delta
       accumulatedDelta.current += e.deltaY;
 
-      const threshold = 80;
+      const threshold = 60; // Reduced threshold for better responsiveness
       const direction = accumulatedDelta.current > 0 ? 1 : -1;
       const nextIndex = currentIndex + direction;
 
@@ -71,24 +79,23 @@ export const About = () => {
       const tryingToScrollUp = direction < 0;
       const tryingToScrollDown = direction > 0;
 
-      // If section is not fully in view yet, allow normal scrolling
-      if (!isFullyInView) {
+      // If section is not active yet, allow normal scrolling to enter/exit
+      if (!isActive) {
         // If scrolling into the section, allow it
         if (tryingToScrollDown && rect.top > 0) {
           accumulatedDelta.current = 0;
           return;
         }
-        if (tryingToScrollUp && rect.bottom < window.innerHeight) {
+        if (tryingToScrollUp && rect.bottom < viewportHeight) {
           accumulatedDelta.current = 0;
           return;
         }
       }
 
       // Handle boundaries - allow exit when at edges
-      if (atFirstSlide && tryingToScrollUp && isFullyInView) {
+      if (atFirstSlide && tryingToScrollUp && isActive) {
         // At first slide, scrolling up - allow normal scroll to previous section
-        // Need some scroll accumulation to prevent accidental exit
-        if (Math.abs(accumulatedDelta.current) >= threshold) {
+        if (Math.abs(accumulatedDelta.current) >= threshold * 1.5) {
           accumulatedDelta.current = 0;
           return; // Allow normal scroll
         }
@@ -97,10 +104,9 @@ export const About = () => {
         return;
       }
       
-      if (atLastSlide && tryingToScrollDown && isFullyInView) {
+      if (atLastSlide && tryingToScrollDown && isActive) {
         // At last slide, scrolling down - allow normal scroll to next section
-        // Need some scroll accumulation to prevent accidental exit
-        if (Math.abs(accumulatedDelta.current) >= threshold) {
+        if (Math.abs(accumulatedDelta.current) >= threshold * 1.5) {
           accumulatedDelta.current = 0;
           return; // Allow normal scroll
         }
@@ -110,7 +116,7 @@ export const About = () => {
       }
 
       // If we're in the section and not at boundaries, handle horizontal scroll
-      if (isFullyInView) {
+      if (isActive) {
         e.preventDefault();
 
         if (Math.abs(accumulatedDelta.current) < threshold) {
@@ -124,7 +130,10 @@ export const About = () => {
           setCurrentIndex(nextIndex);
           setTimeout(() => {
             isLocked.current = false;
-          }, 800);
+          }, 600); // Reduced lock duration for smoother transitions
+        } else {
+          // Reset delta if trying to go beyond boundaries
+          accumulatedDelta.current = 0;
         }
       }
     };
@@ -137,16 +146,16 @@ export const About = () => {
   return (
     <section
       ref={containerRef}
-      className="relative z-10 h-screen overflow-hidden"
+      className="relative z-10 h-[70vh] overflow-hidden"
     >
       {/* Particles Background */}
       <Particles
         particleColors={["#ffffff", "#ffffff"]}
-        particleCount={200}
-        particleSpread={10}
+        particleCount={100}
+        particleSpread={15}
         speed={0.1}
-        particleBaseSize={100}
-        moveParticlesOnHover={true}
+        particleBaseSize={150}
+        
         alphaParticles={false}
         disableRotation={false}
       />
@@ -156,12 +165,13 @@ export const About = () => {
           className="flex transition-transform duration-700 ease-in-out"
           style={{
             transform: `translateX(-${currentIndex * 100}vw)`,
+            willChange: 'transform',
           }}
         >
           {sections.map((section) => (
             <div
               key={section.id}
-              className="w-screen h-screen flex-shrink-0 flex items-start justify-center px-6 md:px-12 lg:px-24 pt-32"
+              className="w-screen h-[70vh] flex-shrink-0 flex items-start justify-center px-6 md:px-12 lg:px-24 pt-20"
             >
               <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-5xl md:text-7xl font-bold text-white mb-8">
