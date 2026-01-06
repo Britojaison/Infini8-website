@@ -1,6 +1,6 @@
-# GoZen Homepage
+# Infini8 Homepage
 
-A modern homepage built with Next.js 14, featuring a GoZen-style design with product navigation and Infini8 Voice integration.
+A modern homepage built with Next.js 14, featuring Infini8 AI products and services.
 
 ## Tech Stack
 
