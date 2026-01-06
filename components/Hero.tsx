@@ -18,7 +18,7 @@ export const Hero = () => {
 
             {/* Main Heading */}
             <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
-              Shaping Tomorrow's Growth, Today with Infini8.
+              Shaping Tomorrow&apos;s Growth, Today with Infini8.
             </h1>
 
             {/* Subheading */}
