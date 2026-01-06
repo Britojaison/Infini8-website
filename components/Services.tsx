@@ -14,7 +14,7 @@ const services = [
     id: 2,
     title: "Web Development",
     description: "Create stunning, responsive websites that engage your audience and drive business growth.",
-    image: "/web4.png",
+    image: "/web.jpg",
   },
   {
     id: 3,
