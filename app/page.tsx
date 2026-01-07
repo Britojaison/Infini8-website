@@ -25,6 +25,17 @@ const Products = dynamic(
   }
 );
 
+const Moments = dynamic(
+  () => import("@/components/Moments").then((mod) => ({ default: mod.Moments })),
+  {
+    loading: () => (
+      <section className="relative z-10 py-32 px-6 md:px-12 lg:px-24">
+        <div className="h-[700px] bg-[#0a0a0f]" />
+      </section>
+    ),
+  }
+);
+
 const About = dynamic(
   () => import("@/components/About").then((mod) => ({ default: mod.About })),
   {
@@ -35,12 +46,12 @@ const About = dynamic(
   }
 );
 
-const Services = dynamic(
-  () => import("@/components/Services").then((mod) => ({ default: mod.Services })),
+const WhatYouDontHaveToDo = dynamic(
+  () => import("@/components/WhatYouDontHaveToDo").then((mod) => ({ default: mod.WhatYouDontHaveToDo })),
   {
     loading: () => (
-      <section className="relative z-10 py-20">
-        <div className="h-screen bg-[#0a0a0f]" />
+      <section className="relative z-10 py-32 px-6 md:px-12 lg:px-24">
+        <div className="h-96 bg-[#0a0a0f]" />
       </section>
     ),
   }
@@ -75,8 +86,9 @@ export default function Home() {
       <Hero />
       <TrustedBy />
       <Products />
+      <Moments />
       <About />
-      <Services />
+      <WhatYouDontHaveToDo />
       <Contact />
       <Footer />
     </main>
