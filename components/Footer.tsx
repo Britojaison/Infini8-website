@@ -45,6 +45,7 @@ export const Footer = () => {
                 width={200}
                 height={67}
                 className="h-16 md:h-24 w-auto"
+                loading="lazy"
               />
               <span className="text-white font-semibold text-xl md:text-2xl">Infini8</span>
             </Link>

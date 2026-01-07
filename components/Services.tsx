@@ -28,45 +28,52 @@ export const Services = () => {
   const cardsRef = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      cardsRef.current.forEach((card, index) => {
-        if (!card) return;
-
-        const rect = card.getBoundingClientRect();
-        const stickyTop = 96; // top-24 = 6rem = 96px
-        
-        // Check if card is stuck at the top
-        const isStuck = rect.top <= stickyTop + 5;
-        
-        // Check if next card is about to cover this one
-        const nextCard = cardsRef.current[index + 1];
-        let isCovered = false;
-        
-        if (nextCard) {
-          const nextRect = nextCard.getBoundingClientRect();
-          // If next card is close to or at the sticky position, this card is being covered
-          isCovered = nextRect.top <= stickyTop + 50;
-        }
-
-        const bgOverlay = card.querySelector('.bg-overlay') as HTMLElement;
-        
-        if (bgOverlay) {
-          if (isStuck && !isCovered) {
-            // Card is on top and visible - make it opaque
-            bgOverlay.style.opacity = '1';
-          } else {
-            // Card is not stuck or is covered - keep glass effect
-            bgOverlay.style.opacity = '0';
+    // Use Intersection Observer for better performance
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const card = entry.target as HTMLElement;
+          const index = parseInt(card.dataset.index || "0");
+          
+          const stickyTop = 96; // top-24 = 6rem = 96px
+          const rect = card.getBoundingClientRect();
+          const isStuck = rect.top <= stickyTop + 5;
+          
+          // Check if next card is about to cover this one
+          const nextCard = cardsRef.current[index + 1];
+          let isCovered = false;
+          
+          if (nextCard) {
+            const nextRect = nextCard.getBoundingClientRect();
+            isCovered = nextRect.top <= stickyTop + 50;
           }
-        }
-      });
-    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+          const bgOverlay = card.querySelector('.bg-overlay') as HTMLElement;
+          
+          if (bgOverlay) {
+            if (isStuck && !isCovered && entry.isIntersecting) {
+              bgOverlay.style.opacity = '1';
+            } else {
+              bgOverlay.style.opacity = '0';
+            }
+          }
+        });
+      },
+      {
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+        rootMargin: '0px',
+      }
+    );
+
+    // Observe all cards
+    cardsRef.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      cardsRef.current.forEach((card) => {
+        if (card) observer.unobserve(card);
+      });
     };
   }, []);
 
@@ -87,7 +94,10 @@ export const Services = () => {
             <div
               key={service.id}
               ref={(el) => {
-                if (el) cardsRef.current[index] = el;
+                if (el) {
+                  cardsRef.current[index] = el;
+                  el.dataset.index = index.toString();
+                }
               }}
               className="sticky top-24 rounded-2xl p-8 md:p-12 mb-8 border border-purple-500/30 overflow-hidden"
               style={{
@@ -119,7 +129,9 @@ export const Services = () => {
                     alt={service.title}
                     fill
                     className="object-cover"
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    loading="lazy"
+                    quality={75}
                   />
                 </div>
               )}

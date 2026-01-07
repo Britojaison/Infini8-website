@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import Particles from "./Particles";
 
 const sections = [
@@ -27,12 +27,15 @@ export const About = () => {
   const isLocked = useRef(false);
   const accumulatedDelta = useRef(0);
   const lastScrollTime = useRef(0);
+  const rafId = useRef<number | null>(null);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  // Memoize particleColors to prevent Particles from re-initializing
+  const particleColors = useMemo(() => ["#ffffff", "#ffffff"], []);
 
-    const handleWheel = (e: WheelEvent) => {
+  const handleWheel = useCallback((e: WheelEvent) => {
+      const container = containerRef.current;
+      if (!container) return;
+      
       const rect = container.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
       
@@ -136,12 +139,33 @@ export const About = () => {
           accumulatedDelta.current = 0;
         }
       }
+  }, [currentIndex]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWheelThrottled = (e: WheelEvent) => {
+      // Cancel any pending RAF
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+
+      // Schedule the handler in the next animation frame
+      rafId.current = requestAnimationFrame(() => {
+        handleWheel(e);
+      });
     };
 
-    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("wheel", handleWheelThrottled, { passive: false });
 
-    return () => window.removeEventListener("wheel", handleWheel);
-  }, [currentIndex]);
+    return () => {
+      window.removeEventListener("wheel", handleWheelThrottled);
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
+  }, [handleWheel]);
 
   return (
     <section
@@ -150,12 +174,11 @@ export const About = () => {
     >
       {/* Particles Background */}
       <Particles
-        particleColors={["#ffffff", "#ffffff"]}
-        particleCount={100}
+        particleColors={particleColors}
+        particleCount={40}
         particleSpread={15}
         speed={0.1}
         particleBaseSize={150}
-        
         alphaParticles={false}
         disableRotation={false}
       />
@@ -188,3 +211,4 @@ export const About = () => {
     </section>
   );
 };
+

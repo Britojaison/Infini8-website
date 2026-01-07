@@ -71,6 +71,8 @@ export const Products = () => {
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 288px"
+                      loading="lazy"
+                      quality={80}
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent" />
                     <div className="relative w-full h-full p-6 flex flex-col justify-start z-10">
