@@ -31,6 +31,14 @@ export const About = () => {
 
   // Memoize particleColors to prevent Particles from re-initializing
   const particleColors = useMemo(() => ["#ffffff", "#ffffff"], []);
+  
+  // Optimize pixelRatio for performance (cap at 2 for high-DPI displays)
+  const pixelRatio = useMemo(() => {
+    if (typeof window !== "undefined") {
+      return Math.min(window.devicePixelRatio || 1, 2);
+    }
+    return 1;
+  }, []);
 
   const handleWheel = useCallback((e: WheelEvent) => {
       const container = containerRef.current;
@@ -42,13 +50,13 @@ export const About = () => {
       // Check if section is in view
       const isInView = rect.bottom > 0 && rect.top < viewportHeight;
       
-      // Check if section is mostly in view (more lenient for 70vh section)
-      // Section is considered "active" if it's mostly visible (at least 50% visible)
+      // Check if section is mostly in view (70vh section)
+      // Section is considered "active" if at least 60% is visible
       const sectionHeight = rect.height;
       const visibleTop = Math.max(0, -rect.top);
       const visibleBottom = Math.min(sectionHeight, viewportHeight - rect.top);
       const visibleHeight = visibleBottom - visibleTop;
-      const isActive = visibleHeight >= sectionHeight * 0.5; // At least 50% visible
+      const isActive = visibleHeight >= sectionHeight * 0.6; // At least 60% visible
       
       // If section is not in view at all, don't interfere
       if (!isInView) {
@@ -175,12 +183,13 @@ export const About = () => {
       {/* Particles Background */}
       <Particles
         particleColors={particleColors}
-        particleCount={40}
-        particleSpread={15}
+        particleCount={500}
+        particleSpread={20}
         speed={0.1}
-        particleBaseSize={150}
+        particleBaseSize={120}
         alphaParticles={false}
         disableRotation={false}
+        pixelRatio={pixelRatio}
       />
 
       <div className="h-full flex items-center relative z-10">

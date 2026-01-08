@@ -51,11 +51,18 @@ export const WhatYouDontHaveToDo = () => {
 
         {/* Content Grid */}
         <div className="max-w-6xl mx-auto">
-          {/* Problem Statements Label */}
-          <div className="mb-6">
-            <p className="text-sm md:text-base text-gray-500 italic">
-              These are the pain signals teams live with daily:
-            </p>
+          {/* Labels Row - Aligned on same line */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 mb-6">
+            <div>
+              <p className="text-sm md:text-base text-gray-500 italic">
+                These are the pain signals teams live with daily:
+              </p>
+            </div>
+            <div>
+              <p className="text-sm md:text-base text-[#FF9FFC] font-medium">
+                These are what Infini8 eliminates:
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start">
@@ -83,11 +90,6 @@ export const WhatYouDontHaveToDo = () => {
 
             {/* Right Side - Highlighted Resolution States */}
             <div className="space-y-6">
-              <div className="mb-2">
-                <p className="text-sm md:text-base text-[#FF9FFC] font-medium">
-                  These are what Infini8 eliminates:
-                </p>
-              </div>
               {solutions.map((solution, index) => {
                 const isHovered = hoveredIndex === index;
                 return (
