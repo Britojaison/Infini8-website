@@ -5,93 +5,61 @@ import { Hero } from "@/components/Hero";
 // Lazy load components below the fold
 const TrustedBy = dynamic(
   () => import("@/components/TrustedBy").then((mod) => ({ default: mod.TrustedBy })),
-  {
-    loading: () => (
-      <section className="py-20 px-6 md:px-12 lg:px-24">
-        <div className="h-32 bg-[#0a0a0f]" />
-      </section>
-    ),
-  }
+  { loading: () => <div className="h-32 bg-background" /> }
 );
 
 const Products = dynamic(
   () => import("@/components/Products").then((mod) => ({ default: mod.Products })),
-  {
-    loading: () => (
-      <section className="relative z-10 py-20 px-6 md:px-12 lg:px-24">
-        <div className="h-96 bg-[#0a0a0f]" />
-      </section>
-    ),
-  }
+  { loading: () => <div className="h-96 bg-background" /> }
+);
+
+const ValueMetrics = dynamic(
+  () => import("@/components/ValueMetrics").then((mod) => ({ default: mod.ValueMetrics })),
+  { loading: () => <div className="h-96 bg-background" /> }
 );
 
 const Moments = dynamic(
   () => import("@/components/Moments").then((mod) => ({ default: mod.Moments })),
-  {
-    loading: () => (
-      <section className="relative z-10 py-32 px-6 md:px-12 lg:px-24">
-        <div className="h-[700px] bg-[#0a0a0f]" />
-      </section>
-    ),
-  }
+  { loading: () => <div className="h-[700px] bg-background" /> }
 );
 
 const About = dynamic(
   () => import("@/components/About").then((mod) => ({ default: mod.About })),
   {
-    loading: () => (
-      <section className="relative z-10 h-[70vh] bg-[#0a0a0f]" />
-    ),
-    ssr: false, // Disable SSR for WebGL components
+    loading: () => <div className="h-[70vh] bg-background" />,
+    ssr: false,
   }
 );
 
-const WhatYouDontHaveToDo = dynamic(
-  () => import("@/components/WhatYouDontHaveToDo").then((mod) => ({ default: mod.WhatYouDontHaveToDo })),
-  {
-    loading: () => (
-      <section className="relative z-10 py-32 px-6 md:px-12 lg:px-24">
-        <div className="h-96 bg-[#0a0a0f]" />
-      </section>
-    ),
-  }
-);
-
-const Contact = dynamic(
-  () => import("@/components/Contact").then((mod) => ({ default: mod.Contact })),
-  {
-    loading: () => (
-      <section className="relative z-10 py-20 px-6 md:px-12 lg:px-24">
-        <div className="h-96 bg-[#0a0a0f]" />
-      </section>
-    ),
-  }
+const UnifiedCTA = dynamic(
+  () => import("@/components/UnifiedCTA").then((mod) => ({ default: mod.UnifiedCTA })),
+  { loading: () => <div className="h-64 bg-background" /> }
 );
 
 const Footer = dynamic(
   () => import("@/components/Footer").then((mod) => ({ default: mod.Footer })),
-  {
-    loading: () => (
-      <footer className="relative z-10 py-12">
-        <div className="h-48 bg-[#0a0a0f]" />
-      </footer>
-    ),
-  }
+  { loading: () => <div className="h-48 bg-background" /> }
 );
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0a0a0f] relative">
+    <main className="min-h-screen bg-background relative selection:bg-primary/30">
+      {/* Kinetic Ether Mesh Background */}
+      <div className="mesh-bg" />
+      <div className="noise-overlay" />
+      
       <Navbar />
       <Hero />
-      <TrustedBy />
-      <Products />
-      <Moments />
-      <About />
-      <WhatYouDontHaveToDo />
-      <Contact />
-      <Footer />
+      
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
+        <TrustedBy />
+        <Products />
+        <ValueMetrics />
+        <Moments />
+        <About />
+        <UnifiedCTA />
+        <Footer />
+      </div>
     </main>
   );
 }
-

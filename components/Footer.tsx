@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Infini8Logo } from "./Infini8Logo";
+
 
 const quickLinks = [
   { name: "Pricing", href: "#pricing" },
@@ -38,16 +40,11 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12">
           {/* Company Info */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-6 -mt-4">
-              <Image
-                src="/infini8_logo.png"
-                alt="Infini8 AI Logo"
-                width={200}
-                height={67}
-                className="h-16 md:h-24 w-auto"
-                loading="lazy"
-              />
-              <span className="text-white font-semibold text-xl md:text-2xl">Infini8</span>
+            <Link href="/" className="flex items-center gap-3 mb-8 -mt-2 group">
+              <Infini8Logo className="w-12 h-12" />
+              <div className="text-2xl font-bold tracking-tight text-white font-display group-hover:text-primary deliterate-transition">
+                Infini8
+              </div>
             </Link>
 
             <div className="text-gray-400 text-sm space-y-1 mb-6">

@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ["latin"], 
+  variable: "--font-space-grotesk",
+  weight: ["300", "400", "500", "600", "700"]
+});
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ["latin"], 
+  variable: "--font-jetbrains-mono" 
+});
 
 export const metadata: Metadata = {
   title: "Infini8",
@@ -19,8 +28,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+       <body className={`${inter.className} bg-[#030305] text-white selection:bg-cyan-500/30 overflow-x-hidden`}>
+        <div className="noise-overlay" />
+        {children}
+      </body>
     </html>
   );
 }
