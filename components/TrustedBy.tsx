@@ -1,18 +1,13 @@
 "use client";
 
 const companies = [
-  "OmniScale",
-  "Z-Core",
-  "NeuroLink",
-  "Aether.ia",
-  "GhostGraph",
-  "Singularity",
-  "N-Protocol",
-  "MetaVerse",
-  "V-Nexus",
-  "EchoIntelligence",
-  "DeepNode",
-  "QuantumEdge",
+  "Brainleap",
+  "Synapse",
+  "MMwear",
+  "Zenvista",
+  "Milky Mist Diary",
+  "Gulf Radiant",
+  "Vs holding",
 ];
 
 export const TrustedBy = () => {
@@ -28,11 +23,11 @@ export const TrustedBy = () => {
           </div>
 
           <div className="flex-1 w-full relative overflow-hidden flex items-center">
-             {/* Gradient masks for smooth fade */}
-             <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#030305] to-transparent z-10 opacity-80" />
-             <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#030305] to-transparent z-10 opacity-80" />
-             
-             <div className="flex animate-scroll whitespace-nowrap">
+            {/* Gradient masks for smooth fade */}
+            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#030305] to-transparent z-10 opacity-80" />
+            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#030305] to-transparent z-10 opacity-80" />
+
+            <div className="flex animate-scroll whitespace-nowrap">
               {companies.concat(companies).map((company, index) => (
                 <div
                   key={index}
